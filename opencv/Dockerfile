@@ -43,8 +43,7 @@ RUN apt-get -y update -qq && \
                        \
                        &&\
                        \
-    apt-get autoclean autoremove && \
-    \
+    apt-get autoclean autoremove
     # Re link the latest python
     #rm /usr/bin/python${PYTHON_VERSION%%.*} && ln -s /usr/bin/python${PYTHON_VERSION} /usr/bin/python${PYTHON_VERSION%%.*} &&\
     #rm /usr/bin/python && ln -s /usr/bin/python${PYTHON_VERSION%%.*} /usr/bin/python
