@@ -37,24 +37,8 @@ RUN apt-get -y update -qq && \
                        libtiff-dev \
                        #libv4l-dev \
                        #libvtk6-dev \
-                       \
-                       # Tools
-                       #imagemagick \
-                       \
                        &&\
-                       \
     apt-get autoclean autoremove
-    # Re link the latest python
-    #rm /usr/bin/python${PYTHON_VERSION%%.*} && ln -s /usr/bin/python${PYTHON_VERSION} /usr/bin/python${PYTHON_VERSION%%.*} &&\
-    #rm /usr/bin/python && ln -s /usr/bin/python${PYTHON_VERSION%%.*} /usr/bin/python
-
-# Note that ${PYTHON_VERSION%%.*} extracts the major version
-# Details: https://www.gnu.org/software/bash/manual/html_node/Shell-Parameter-Expansion.html#Shell-Parameter-Expansion
-#RUN pip${PYTHON_VERSION%%.*} install --no-cache-dir --upgrade pip &&\
-#    # Need to reshash pip3 to solve an issue with the upgrade
-#    # check https://github.com/pypa/pip/issues/5240#issuecomment-383309404 for details
-#    hash -r pip${PYTHON_VERSION%%.*} &&\
-#    pip${PYTHON_VERSION%%.*} install --no-cache-dir numpy matplotlib scipy
 
     # Get OpenCV
 RUN git clone https://github.com/opencv/opencv.git &&\
@@ -72,12 +56,21 @@ RUN git clone https://github.com/opencv/opencv.git &&\
     cmake \
     -D CMAKE_BUILD_TYPE=RELEASE \
     -D CMAKE_INSTALL_PREFIX=/usr/local \
-    -D BUILD_LIST=core,imgproc,imgcodecs \
-    -D BUILD_EXAMPLES=OFF \
     -D BUILD_DOCS=OFF \
-    -D BUILD_TESTS=OFF \
+    -D BUILD_EXAMPLES=OFF \
+    -D BUILD_JAVA=OFF \
+    -D BUILD_JPEG=ON \
+    -D BUILD_LIST=core,imgproc,imgcodecs \
     -D BUILD_PERF_TESTS=OFF \
+    -D BUILD_PNG=ON \
+    -D BUILD_PROTOBUF=OFF \
     -D BUILD_SHARED_LIBS=OFF \
+    -D BUILD_TESTS=OFF \
+    -D BUILD_TIFF=ON \
+    -D BUILD_USE_SYMLINKS=OFF \
+    -D BUILD_WEBP=OFF \
+    -D BUILD_WITH_DEBUG_INFO=OFF \
+    -D BUILD_WITH_DYNAMIC_IPP=OFF \
     -D BUILD_ZLIB=OFF \ 
     -D WITH_FFMPEG=OFF \
     -D WITH_OPENCL=OFF \ 
@@ -100,8 +93,7 @@ RUN git clone https://github.com/opencv/opencv.git &&\
     \
     # Clean the install from sources
     cd / &&\
-    rm -r /opencv &&\
-    #rm -r /opencv_contrib
+    rm -r /opencv 
 
 # Change working dirs
 WORKDIR /builds
