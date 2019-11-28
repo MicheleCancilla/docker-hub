@@ -1,7 +1,9 @@
 ARG CV_VER=4.1.2
+ARG GCC_VER=7
+ARG CMAKE_VER=3.13.5
+
 FROM ubuntu:latest
 
-#ENV PYTHON_VERSION 3.7
 ENV OPENCV_VERSION ${CV_VER}
 
 ENV NUM_CORES 4
@@ -11,15 +13,33 @@ ENV NUM_CORES 4
 # https://stackoverflow.com/a/44333806/424986
 ENV DEBIAN_FRONTEND=noninteractive
 
+RUN apt-get update \
+    && apt-get install -y gcc-${GCC_VER} g++-${GCC_VER} \
+    && update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-${GCC_VER} 10 \
+    && update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-${GCC_VER} 10 \
+    && update-alternatives --install /usr/bin/cc cc /usr/bin/gcc 20 \
+    && update-alternatives --set cc /usr/bin/gcc \
+    && update-alternatives --install /usr/bin/c++ c++ /usr/bin/g++ 20 \
+    && update-alternatives --set c++ /usr/bin/g++    
+    
+RUN apt-get update && apt-get install -y wget \
+    && wget https://github.com/Kitware/CMake/releases/download/v${CMAKE_VER}/cmake-${CMAKE_VER}-Linux-x86_64.sh \
+      -q -O /tmp/cmake-install.sh \
+    && chmod u+x /tmp/cmake-install.sh \
+    && mkdir /home/cmake-${CMAKE_VER} \
+    && /tmp/cmake-install.sh --skip-license --prefix=/home/cmake-${CMAKE_VER} \
+    && rm /tmp/cmake-install.sh \
+    && update-alternatives --install /usr/bin/cmake cmake /home/cmake-${CMAKE_VER}/bin/cmake 10 \
+    && update-alternatives --install /usr/bin/ctest ctest /home/cmake-${CMAKE_VER}/bin/ctest 10 \
+    && update-alternatives --install /usr/bin/cpack cpack /home/cmake-${CMAKE_VER}/bin/cpack 10 \
+
 
 # Install OpenCV
 RUN apt-get -y update -qq && \
-    apt-get -y install wget \
-                       unzip \
+    apt-get -y install unzip \
                        \
                        # Required
                        build-essential \
-                       cmake \
                        git \
                        pkg-config \
                        #libatlas-base-dev \
@@ -29,15 +49,11 @@ RUN apt-get -y update -qq && \
                        #libswscale-dev \
                        \
                        # Optional
-                       #libdc1394-22-dev \
-                       libjpeg-dev \
-                       libpng-dev \
-                       #libtbb2 \
-                       #libtbb-dev \
-                       libtiff-dev \
-                       #libv4l-dev \
-                       #libvtk6-dev \
-                       &&\
+#                        libjpeg-dev \
+#                        libpng-dev \
+#                        libtiff-dev \
+                       gnuplot \
+                       &&\ 
     apt-get autoclean autoremove
 
     # Get OpenCV
