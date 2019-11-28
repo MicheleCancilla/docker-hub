@@ -12,9 +12,9 @@ ENV NUM_CORES 4
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update \
-    && apt-get install -y gcc-${GCC_VER} g++-${GCC_VER} \
-    && update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-${GCC_VER} 10 \
-    && update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-${GCC_VER} 10 \
+    && apt-get install -y gcc-$GCC_VER g++-$GCC_VER gcc-$GCC_VER-multilib g++-$GCC_VER-multilib \
+    && update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-$GCC_VER 10 \
+    && update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-$GCC_VER 10 \
     && update-alternatives --install /usr/bin/cc cc /usr/bin/gcc 20 \
     && update-alternatives --set cc /usr/bin/gcc \
     && update-alternatives --install /usr/bin/c++ c++ /usr/bin/g++ 20 \
