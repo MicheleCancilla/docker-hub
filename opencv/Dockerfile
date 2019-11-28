@@ -31,7 +31,7 @@ RUN apt-get update && apt-get install -y wget \
     && rm /tmp/cmake-install.sh \
     && update-alternatives --install /usr/bin/cmake cmake /home/cmake-${CMAKE_VER}/bin/cmake 10 \
     && update-alternatives --install /usr/bin/ctest ctest /home/cmake-${CMAKE_VER}/bin/ctest 10 \
-    && update-alternatives --install /usr/bin/cpack cpack /home/cmake-${CMAKE_VER}/bin/cpack 10 \
+    && update-alternatives --install /usr/bin/cpack cpack /home/cmake-${CMAKE_VER}/bin/cpack 10
 
 
 # Install OpenCV
