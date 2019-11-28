@@ -1,12 +1,8 @@
-ARG CV_VER=4.1.2
-ARG GCC_VER=7
-ARG CMAKE_VER=3.13.5
-
 FROM ubuntu:latest
 
-ENV OPENCV_VERSION ${CV_VER}
-ENV GCC_VERSION ${GCC_VER}
-ENV CMAKE_VERSION ${CMAKE_VER}
+ARG CMAKE_VER=3.13.5
+ARG CV_VER=4.1.2
+ARG GCC_VER=7
 
 ENV NUM_CORES 4
 
@@ -16,24 +12,24 @@ ENV NUM_CORES 4
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update \
-    && apt-get install -y gcc-$GCC_VERSION g++-$GCC_VERSION \
-    && update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-$GCC_VERSION 10 \
-    && update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-$GCC_VERSION 10 \
+    && apt-get install -y gcc-${GCC_VER} g++-${GCC_VER} \
+    && update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-${GCC_VER} 10 \
+    && update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-${GCC_VER} 10 \
     && update-alternatives --install /usr/bin/cc cc /usr/bin/gcc 20 \
     && update-alternatives --set cc /usr/bin/gcc \
     && update-alternatives --install /usr/bin/c++ c++ /usr/bin/g++ 20 \
     && update-alternatives --set c++ /usr/bin/g++    
     
 RUN apt-get update && apt-get install -y wget \
-    && wget https://github.com/Kitware/CMake/releases/download/v$CMAKE_VERSION/cmake-$CMAKE_VERSION-Linux-x86_64.sh \
+    && wget https://github.com/Kitware/CMake/releases/download/v$CMAKE_VER/cmake-$CMAKE_VER-Linux-x86_64.sh \
       -q -O /tmp/cmake-install.sh \
     && chmod u+x /tmp/cmake-install.sh \
-    && mkdir /home/cmake-$CMAKE_VERSION \
-    && /tmp/cmake-install.sh --skip-license --prefix=/home/cmake-$CMAKE_VERSION \
+    && mkdir /home/cmake-$CMAKE_VER \
+    && /tmp/cmake-install.sh --skip-license --prefix=/home/cmake-$CMAKE_VER \
     && rm /tmp/cmake-install.sh \
-    && update-alternatives --install /usr/bin/cmake cmake /home/cmake-$CMAKE_VERSION/bin/cmake 10 \
-    && update-alternatives --install /usr/bin/ctest ctest /home/cmake-$CMAKE_VERSION/bin/ctest 10 \
-    && update-alternatives --install /usr/bin/cpack cpack /home/cmake-$CMAKE_VERSION/bin/cpack 10
+    && update-alternatives --install /usr/bin/cmake cmake /home/cmake-$CMAKE_VER/bin/cmake 10 \
+    && update-alternatives --install /usr/bin/ctest ctest /home/cmake-$CMAKE_VER/bin/ctest 10 \
+    && update-alternatives --install /usr/bin/cpack cpack /home/cmake-$CMAKE_VER/bin/cpack 10
 
 
 # Install OpenCV
@@ -61,12 +57,12 @@ RUN apt-get -y update -qq && \
     # Get OpenCV
 RUN git clone https://github.com/opencv/opencv.git &&\
     cd opencv &&\
-    git checkout $OPENCV_VERSION &&\
+    git checkout $CV_VER &&\
     cd / &&\
     # Get OpenCV contrib modules
     #git clone https://github.com/opencv/opencv_contrib &&\
     #cd opencv_contrib &&\
-    #git checkout $OPENCV_VERSION &&\
+    #git checkout $CV_VER &&\
     mkdir /opencv/build &&\
     cd /opencv/build &&\
     \
@@ -76,6 +72,7 @@ RUN git clone https://github.com/opencv/opencv.git &&\
     -D CMAKE_INSTALL_PREFIX=/usr/local \
     -D BUILD_DOCS=OFF \
     -D BUILD_EXAMPLES=OFF \
+    -D BUILD_JASPER=OFF \
     -D BUILD_JAVA=OFF \
     -D BUILD_JPEG=ON \
     -D BUILD_LIST=core,imgproc,imgcodecs \
