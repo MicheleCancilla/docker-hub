@@ -14,11 +14,10 @@ RUN apt-get update \
     && apt-get install -y gcc-$GCC_VER g++-$GCC_VER gcc-$GCC_VER-base \
     && update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-$GCC_VER 100 \
     && update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-$GCC_VER 100
-    
-    
-RUN apt-get update \
-&& apt-get install -y wget graphviz \
-    && wget https://github.com/Kitware/CMake/releases/download/v$CMAKE_VER/cmake-$CMAKE_VER-Linux-x86_64.sh \
+
+RUN apt-get install -y wget git graphviz
+
+RUN wget https://github.com/Kitware/CMake/releases/download/v$CMAKE_VER/cmake-$CMAKE_VER-Linux-x86_64.sh \
       -q -O /tmp/cmake-install.sh \
     && chmod u+x /tmp/cmake-install.sh \
     && mkdir /home/cmake-$CMAKE_VER \
