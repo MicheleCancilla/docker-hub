@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM nvidia/cuda:10.1-devel-ubuntu18.04
 
 ARG GCC_VER=7
 ARG CMAKE_VER=3.13.5
