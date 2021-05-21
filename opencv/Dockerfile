@@ -1,6 +1,6 @@
 FROM pritt/base:latest
 
-ARG CV_VER=4.5.1
+ARG CV_VER=4.5.2
 
 ENV NUM_CORES=2
 
